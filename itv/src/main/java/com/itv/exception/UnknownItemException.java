@@ -6,6 +6,11 @@ package com.itv.exception;
  */
 public class UnknownItemException extends Exception {
 
+	public UnknownItemException() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * 
 	 */

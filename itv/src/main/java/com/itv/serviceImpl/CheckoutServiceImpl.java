@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itv.dto.ItemDetailDto;
+import com.itv.exception.InvalidOfferException;
+import com.itv.exception.UnknownItemException;
 import com.itv.model.Checkout;
 import com.itv.model.Offer;
 import com.itv.model.Response;
@@ -41,8 +43,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 			}
 		});
 		
-		
-		
+
 		List<ItemDetailDto> itemDetails = dbservice.getItemPrice(itemsPurchased.keySet());
 		
 		//itemsPurchased.forEach((item,count)->{
@@ -53,7 +54,6 @@ public class CheckoutServiceImpl implements CheckoutService {
 			
 			int count = entry.getValue();
 		
-			
 			//itemDetails.forEach(itemDetailDto->{
 			
 			for(ItemDetailDto itemDetailDto : itemDetails) {
@@ -64,16 +64,15 @@ public class CheckoutServiceImpl implements CheckoutService {
 					
 					if(checkout.getSpecialPricing()!= null 
 							&& checkout.getSpecialPricing().getOffers() != null  
-							&& checkout.getSpecialPricing().getOffers().size()>1) {
+							&& checkout.getSpecialPricing().getOffers().size()>0) {
 					
-						for(Offer offer :checkout.getSpecialPricing().getOffers()) {
-							
-							if(offer.getItemName().equals(item)) {
-								
-								itemOffer = offer;
-								break;
-							}
-						}
+
+						
+						itemOffer = checkout.getSpecialPricing().getOffers().stream().
+								filter(offer->offer.getItemName().equals(item)).
+								findFirst().
+								orElse(null);
+						
 					}
 					
 					if(itemOffer != null && count>=itemOffer.getUnits()) {
@@ -91,13 +90,11 @@ public class CheckoutServiceImpl implements CheckoutService {
 		}
 			
 		//});
-		
-		
-		
+
 		return totalBill;
 	}
 	
-	public boolean validateInputData(Checkout checkout) {
+	public boolean validateInputData(Checkout checkout) throws InvalidOfferException,UnknownItemException {
 		
 		boolean result = true;
 		List<String> items = dbservice.getAllItems();
@@ -105,8 +102,9 @@ public class CheckoutServiceImpl implements CheckoutService {
 		
 		for(String itemPurchased : itemsPurchased) {
 			if(!items.contains(itemPurchased)) {
-				result = false;
-				break;
+				//result = false;
+				//break;
+				throw new UnknownItemException();
 			}
 		}
 		
@@ -119,10 +117,12 @@ public class CheckoutServiceImpl implements CheckoutService {
 				
 				for(Offer offer :offers) {
 					if(offer.getPrice()<=0) {
-						result = false;
-						break;
+						//result = false;
+						//break;
+						throw new InvalidOfferException();
 					}	
 				}
+				
 			}
 		}
 		return result;
@@ -132,11 +132,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 	public Response generateResponse(boolean validationResult, int totalBill) {
 
 		Response response = new Response();
-		if(validationResult) {
-			response.setResult("SUCCESS");
-		} else {
-			response.setResult("FAIL");
-		}
+		String status= validationResult ? "SUCCESS":"FAIL";
+		response.setResult(status);
 		response.setTotalBill(totalBill);
 		
 		return response;

@@ -1,9 +1,8 @@
 package itv.itv;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -21,6 +20,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.itv.dto.ItemDetailDto;
+import com.itv.exception.InvalidOfferException;
+import com.itv.exception.UnknownItemException;
 import com.itv.model.Checkout;
 import com.itv.model.ItemsPurchased;
 import com.itv.model.Offer;
@@ -111,13 +112,15 @@ public class CheckoutServiceTest {
 		List<String> items = Stream.of("A", "B", "C", "A", "A", "C","D").collect(Collectors.toList());
 		itemsPurchased.setItems(items);
 		checkout.setItemsPurchased(itemsPurchased);
+		try {
+			boolean result = checkoutService.validateInputData(checkout);
+			assertTrue(result);
+		}catch(Exception e) {}
 		
-		boolean result = checkoutService.validateInputData(checkout);
-		assertTrue(result);
 	}
 	
-	@Test
-	public void testValidateInputData_InvalidDataUnknownItem() {
+	@Test(expected = UnknownItemException.class )
+	public void testValidateInputData_InvalidDataUnknownItem() throws InvalidOfferException,UnknownItemException {
 		
 		Checkout checkout = new Checkout();
 		ItemsPurchased itemsPurchased = new ItemsPurchased();
@@ -126,13 +129,13 @@ public class CheckoutServiceTest {
 		itemsPurchased.setItems(items);
 		checkout.setItemsPurchased(itemsPurchased);
 		
-		boolean result = checkoutService.validateInputData(checkout);
-		assertFalse(result);
+		checkoutService.validateInputData(checkout);
+		//assertFalse(result);
 	}
 	
 	
-	@Test
-	public void testValidateInputData_InvalidDataZeroSpecialOffer() {
+	@Test(expected = InvalidOfferException.class )
+	public void testValidateInputData_InvalidDataZeroSpecialOffer() throws InvalidOfferException,UnknownItemException {
 		
 		Checkout checkoutinvalid = new Checkout();
 		ItemsPurchased itemsPurchased = new ItemsPurchased();
@@ -147,8 +150,8 @@ public class CheckoutServiceTest {
 		invalidspecialPricing.setOffers(invalidoffers);
 		checkoutinvalid.setSpecialPricing(invalidspecialPricing);
 		
-		boolean result = checkoutService.validateInputData(checkoutinvalid);
-		assertFalse(result);
+		checkoutService.validateInputData(checkoutinvalid);
+		//assertFalse(result);
 	}
 
 	@Test

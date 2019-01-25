@@ -31,7 +31,7 @@ public class CheckoutController {
 	
 
 	@RequestMapping(value ="/checkout",method=RequestMethod.POST,produces={MediaType.APPLICATION_JSON_VALUE},consumes={MediaType.APPLICATION_JSON_VALUE})
-	public Response getResponse(@RequestBody Checkout checkout) {
+	public Response getResponse(@RequestBody Checkout checkout) throws InvalidOfferException,UnknownItemException {
 		
 		//validate input data
 		boolean validationResult = checkoutservice.validateInputData(checkout);

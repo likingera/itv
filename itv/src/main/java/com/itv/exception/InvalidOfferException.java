@@ -6,6 +6,11 @@ package com.itv.exception;
  */
 public class InvalidOfferException extends Exception {
 
+	public InvalidOfferException() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * 
 	 */

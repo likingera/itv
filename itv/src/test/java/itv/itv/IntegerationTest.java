@@ -242,7 +242,7 @@ public class IntegerationTest {
 		
 		assertNotNull(response.getBody().getResult());
 		
-		assertThat(response.getBody().getResult(), equalTo("FAIL"));
+		assertThat(response.getBody().getResult(), equalTo("UNKNOWN_ITEM"));
 		
 		assertThat(response.getBody().getTotalBill(), equalTo(0));
 		
@@ -257,7 +257,7 @@ public class IntegerationTest {
 		
 		ItemsPurchased itemsPurchased = new  ItemsPurchased();
 		
-		List<String> items = Stream.of("A", "B", "C").collect(Collectors.toList());
+		List<String> items = Stream.of("A", "B").collect(Collectors.toList());
 		
 		itemsPurchased.setItems(items);
 		
@@ -283,7 +283,7 @@ public class IntegerationTest {
 		
 		assertNotNull(response.getBody().getResult());
 		
-		assertThat(response.getBody().getResult(), equalTo("FAIL"));
+		assertThat(response.getBody().getResult(), equalTo("INVALID_OFFER"));
 		
 		assertThat(response.getBody().getTotalBill(), equalTo(0));
 		
