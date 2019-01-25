@@ -25,6 +25,10 @@ import com.itv.model.Response;
 import com.itv.model.SpecialPricing;
 import com.itv.service.CheckoutService;
 
+/**
+ * @author Likin Gera
+ *
+ */
 public class CheckoutControllerTest {
 
 	@InjectMocks
@@ -68,10 +72,7 @@ public class CheckoutControllerTest {
 		
 		SpecialPricing specialPricing = new SpecialPricing();
 		List<Offer> offers = new ArrayList<Offer>();
-		Offer offer = new Offer();
-		offer.setItemName("A");
-		offer.setPrice(130);
-		offer.setUnits(3);
+		Offer offer = new Offer("A",3,130);
 		offers.add(offer);
 		specialPricing.setOffers(offers);
 		checkout.setSpecialPricing(specialPricing);
@@ -86,10 +87,8 @@ public class CheckoutControllerTest {
 		
 		SpecialPricing invalidspecialPricing = new SpecialPricing();
 		List<Offer> invalidoffers = new ArrayList<Offer>();
-		Offer invalidoffer = new Offer();
-		invalidoffer.setItemName("A");
-		invalidoffer.setPrice(0);
-		invalidoffer.setUnits(1);
+		Offer invalidoffer = new Offer("A",1,0);
+		
 		invalidoffers.add(invalidoffer);
 		invalidspecialPricing.setOffers(invalidoffers);
 		checkoutinvalid.setSpecialPricing(invalidspecialPricing);

@@ -1,5 +1,9 @@
 package com.itv.model;
 
+/**
+ * @author Likin Gera
+ *
+ */
 public class Response {
 	
 	private int totalBill;

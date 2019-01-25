@@ -1,17 +1,19 @@
 package itv.itv;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.*;
-
-import org.hamcrest.core.Is;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,6 +30,10 @@ import com.itv.service.CheckoutService;
 import com.itv.service.DbService;
 import com.itv.serviceImpl.CheckoutServiceImpl;
 
+/**
+ * @author Likin Gera
+ *
+ */
 public class CheckoutServiceTest {
 	
 	@InjectMocks
@@ -36,25 +42,15 @@ public class CheckoutServiceTest {
 	@Mock
 	DbService dbService;
 	
-	
 
-//	@BeforeClass
-//	public static void setUpBeforeClass() throws Exception {
-//	}
-//
-//	@AfterClass
-//	public static void tearDownAfterClass() throws Exception {
-//	}
 
 	@Before
 	public void setUp() throws Exception {
 		
 		MockitoAnnotations.initMocks(this);
-		List<String> items = new ArrayList<String>();
-		items.add("A");
-		items.add("B");
-		items.add("C");
-		items.add("D");
+		
+		List<String> items = Stream.of("A", "B", "C", "D").collect(Collectors.toList());
+		
 		Mockito.when(dbService.getAllItems()).thenReturn(items);
 		
 		List<ItemDetailDto> ItemDetailsDto = new ArrayList<ItemDetailDto>();
@@ -90,22 +86,14 @@ public class CheckoutServiceTest {
 	public void testCalculateTotalBill() {
 		Checkout checkout = new Checkout();
 		ItemsPurchased itemsPurchased = new ItemsPurchased();
-		List<String> items = new ArrayList<String>();
-		items.add("A");
-		items.add("B");
-		items.add("C");
-		items.add("A");
-		items.add("A");
-		items.add("C");
-		items.add("D");
+		List<String> items = Stream.of("A", "B", "C", "A", "A", "C","D").collect(Collectors.toList());
+		
 		itemsPurchased.setItems(items);
 		checkout.setItemsPurchased(itemsPurchased);
 		SpecialPricing specialPricing = new SpecialPricing();
 		List<Offer> offers = new ArrayList<Offer>();
-		Offer offer = new Offer();
-		offer.setItemName("A");
-		offer.setPrice(130);
-		offer.setUnits(3);
+		Offer offer = new Offer("A",3,130);
+		
 		offers.add(offer);
 		specialPricing.setOffers(offers);
 		checkout.setSpecialPricing(specialPricing);
@@ -120,14 +108,7 @@ public class CheckoutServiceTest {
 		
 		Checkout checkout = new Checkout();
 		ItemsPurchased itemsPurchased = new ItemsPurchased();
-		List<String> items = new ArrayList<String>();
-		items.add("A");
-		items.add("B");
-		items.add("C");
-		items.add("A");
-		items.add("A");
-		items.add("C");
-		items.add("D");
+		List<String> items = Stream.of("A", "B", "C", "A", "A", "C","D").collect(Collectors.toList());
 		itemsPurchased.setItems(items);
 		checkout.setItemsPurchased(itemsPurchased);
 		
@@ -161,10 +142,7 @@ public class CheckoutServiceTest {
 		checkoutinvalid.setItemsPurchased(itemsPurchased);
 		SpecialPricing invalidspecialPricing = new SpecialPricing();
 		List<Offer> invalidoffers = new ArrayList<Offer>();
-		Offer invalidoffer = new Offer();
-		invalidoffer.setItemName("A");
-		invalidoffer.setPrice(0);
-		invalidoffer.setUnits(1);
+		Offer invalidoffer = new Offer("A",1,0);
 		invalidoffers.add(invalidoffer);
 		invalidspecialPricing.setOffers(invalidoffers);
 		checkoutinvalid.setSpecialPricing(invalidspecialPricing);

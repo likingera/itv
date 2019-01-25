@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.itv.dto.ItemDetailDto;
 import com.itv.model.Checkout;
@@ -13,6 +14,12 @@ import com.itv.model.Response;
 import com.itv.service.CheckoutService;
 import com.itv.service.DbService;
 
+
+/**
+ * @author Likin Gera
+ *
+ */
+@Service
 public class CheckoutServiceImpl implements CheckoutService {
 	
 	@Autowired
@@ -55,12 +62,17 @@ public class CheckoutServiceImpl implements CheckoutService {
 					
 					Offer itemOffer = null;
 					
-					for(Offer offer :checkout.getSpecialPricing().getOffers()) {
-						
-						if(offer.getItemName().equals(item)) {
+					if(checkout.getSpecialPricing()!= null 
+							&& checkout.getSpecialPricing().getOffers() != null  
+							&& checkout.getSpecialPricing().getOffers().size()>1) {
+					
+						for(Offer offer :checkout.getSpecialPricing().getOffers()) {
 							
-							itemOffer = offer;
-							break;
+							if(offer.getItemName().equals(item)) {
+								
+								itemOffer = offer;
+								break;
+							}
 						}
 					}
 					

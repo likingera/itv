@@ -1,18 +1,17 @@
 package itv.itv;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.hamcrest.CoreMatchers.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,6 +27,10 @@ import com.itv.service.DbService;
 import com.itv.serviceImpl.DbServiceImpl;
 
 
+/**
+ * @author Likin Gera
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=DbServiceImpl.class)
 @DataJpaTest
@@ -44,6 +47,10 @@ public class DbServiceTest {
 
 	
 
+	/**
+	 * unit test
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		
@@ -68,6 +75,9 @@ public class DbServiceTest {
 	
 	
 
+	/**
+	 * Unit test
+	 */
 	@Test
 	public void testgetAllItems() {
 		
@@ -77,13 +87,13 @@ public class DbServiceTest {
 	}
 	
 	
+	/**
+	 * Unit test
+	 */
 	@Test
 	public void testgetItemPrice() {
-
-		Set<String> items= new HashSet<String>();
-		items.add("A");
-		items.add("B");
-		items.add("C");
+		
+		Set<String> items = Stream.of("A", "B", "C").collect(Collectors.toSet());
 		
 		List<ItemDetailDto> itemDetails = dbService.getItemPrice(items);
 		assertTrue(itemDetails.size()>0);

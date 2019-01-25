@@ -6,15 +6,21 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Repository;
 
 import com.itv.dto.ItemDetailDto;
 import com.itv.model.ItemDetail;
 import com.itv.service.DbService;
 
+/**
+ * @author Likin Gera
+ *
+ */
 @Repository
+@EntityScan("com.itv.model")
 public class DbServiceImpl implements DbService{
 	
 	
@@ -57,5 +63,35 @@ public class DbServiceImpl implements DbService{
 		
 		return itemDetailsDto;
 	}
+	
+	@Override
+    @Transactional
+	public void add(ItemDetailDto itemDetail) {
+
+		ItemDetail entity = new ItemDetail();
+		entity.setId(itemDetail.getId());
+		entity.setItemName(itemDetail.getItemName());
+		entity.setUnitPrice(itemDetail.getUnitPrice());
+		entityManager.persist(entity);
+		
+	}
+	
+	@Override
+	@Transactional
+	public void deleteAll() {
+
+		String query = " From ItemDetail ";
+		
+		List<ItemDetail> itemDetails = entityManager.createQuery(query).getResultList();
+		
+		itemDetails.forEach(item -> {  
+			
+			entityManager.remove(item);;
+			
+		});
+		
+	}
+	
+	
 
 }
