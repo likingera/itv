@@ -30,8 +30,7 @@ Supermarket Checkout application
 4. Use tool like Postman to hit the service.Endpoint :- `http://localhost:8080/checkout`
 5. Sample request
 
-`{
-
+{
 	"itemsPurchased" : {"items":["A","B","A","A","B"]},
 	"specialPricing" : {"offers": [ {"units":"3","itemName":"A","price":"100"} , {"units":"2","itemName":"B","price":"50"}]}
-}`
+}
