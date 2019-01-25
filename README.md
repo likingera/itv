@@ -24,6 +24,7 @@ Supermarket Checkout application
 1. The application uses springboot and uses embeded tomcat container.
 2. Run the main method present under the class com.itv.controller.CheckoutController
 3. Open h2 consoledb to insert sample data. Url is `http://localhost:8080/h2-console`
+4. Change default database to `checkout`
 4. Data:-
    `INSERT INTO ITEMDETAILS VALUES(1, 'A','50');`
    `INSERT INTO ITEMDETAILS VALUES(2, 'B','30');`
