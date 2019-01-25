@@ -15,7 +15,7 @@ Supermarket Checkout application
 1. first clone the repository 
 2. Run the following command to set up the dependencies and run the all Junit `mvn clean install`
 
-## Running integeration test
+## Running integration test
 
 1. Run the following command to set up the dependencies `mvn clean install -Dintegerationtests=run`
 
