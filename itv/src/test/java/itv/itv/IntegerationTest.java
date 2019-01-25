@@ -24,6 +24,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.itv.controller.CheckoutController;
@@ -44,6 +45,7 @@ import com.itv.service.DbService;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT,classes = CheckoutController.class)
 @ComponentScan("com.itv.*")
+@IfProfileValue(name="integerationtests", value="integration")
 public class IntegerationTest {
 	
 	Logger LOG = LoggerFactory.getLogger(IntegerationTest.class);
